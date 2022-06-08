@@ -1,4 +1,7 @@
-﻿namespace BookStoreAPI
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace BookStoreAPI
 {
     public class Startup
     {
@@ -13,7 +16,14 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddDbContext<AplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("defaultConnection"))
+            );
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "WebAPIAutores", Version = "v1" });
+            });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
         }
